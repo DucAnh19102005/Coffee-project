@@ -16,3 +16,5 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.thymeleaf.cache=false
 spring.thymeleaf.prefix=classpath:/templates/
 spring.thymeleaf.suffix=.html
+
+docker run --env-file .env -p 8080:8080 --name coffee-app coffee-application
