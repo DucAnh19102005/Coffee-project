@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create | Edit</title>
+</head>
+<body>
+
+<h1 th:if="${formMode == 'edit'}">Edit a product</h1>
+<h1 th:if="${formMode == 'new'}">Create a product</h1>
+<form th:action="@{'/products/save'}" method="post" th:object="${selectedProduct}">
+    <p>
+        <label>Id</label>
+        <input type="text" th:field="*{id}" th:readonly="${formMode == 'edit'}">
+        <span style="color: red" th:errors="*{id}"></span>
+        <span th:if="${duplicated}" th:text="${duplicated}" style="color: red"></span>
+    </p>
+
+    <p>
+        <label>Name</label>
+        <input type="text" th:field="*{name}">
+        <span style="color: red" th:errors="*{name}">???</span>
+    </p>
+
+    <p>
+        <label>Quantity</label>
+        <input type="text" th:field="*{quantity}">
+        <span style="color: red" th:errors="*{quantity}">???</span>
+    </p>
+
+    <p>
+        <label>Price</label>
+        <input type="text" th:field="*{price}">
+        <span style="color: red" th:errors="*{price}">???</span>
+    </p>
+
+    <p>
+        <!--show name của category nhưng lấy id ẩn phía dưới-->
+        <label>Category</label>
+        <label>
+            <select th:field="*{category}">
+                <option th:each="x : ${cates}"
+                        th:value="${x.id}"
+                        th:text="${x.name}"
+                        th:selected="${selectedProduct.category != null
+                        and selectedProduct.category.id == x.id}">
+                </option>
+
+            </select>
+        </label>
+    </p>
+
+    <p>
+        <button type="submit">Save</button>
+    </p>
+
+    <p>
+        <input type="hidden" name="mode" th:value="${formMode}">
+    </p>
+</form>
+
+</body>
+</html>

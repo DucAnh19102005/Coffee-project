@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+</head>
+<body>
+
+<h2 style="color: deeppink" th:text="${'Welcome,' + session.loggedInUser.getEmail() + '!!!'}"></h2>
+<h1>Show list of product</h1>
+
+<p>
+<form th:action="@{/products}" method="get">
+    <label>Keyword: </label>
+    <input type="text" name="kw" placeholder="Search by name">
+    <button type="submit">Search</button>
+</form>
+</p>
+
+<p th:if="${session.loggedInUser.getRole() == 1}">
+    <a th:href="@{'/products/new'}">New product</a>
+</p>
+
+<!--    table chưa toàn bộ danh sách sản phẩm, mỗi dòng 1 là sản phẩm
+gồm: id, name, quantity, price, tên-phân-loại (catename) JOIN 2 BẢNG
+Mỗi dòng chứa luôn Edit/Delete biến đổi theo dòng - theo Id sản phẩm-->
+<!--table>thead>tr>th*3^^tbody>tr>td*3-->
+<span style="color: red" th:if="${listProduct.isEmpty()}">List is empty!!!!</span>
+<table th:unless="${listProduct.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Cate. Name</th>
+        <th th:if="${session.loggedInUser.getRole() == 1}">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="x : ${listProduct}">
+        <td th:text="${x.id}"></td>
+        <td th:text="${x.name}"></td>
+        <td th:text="${x.quantity}"></td>
+        <td th:text="${x.price}"></td>
+        <td th:text="${x.category.name}"></td>
+        <td th:if="${session.loggedInUser.getRole() == 1}">
+            <a th:href="@{'/products/update/' + ${x.id}}">Update</a> |
+            <a th:href="@{'/products/delete/' + ${x.id}}"
+               onclick="return confirm('Are you sure?');"
+            >Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    <a th:href="@{'/logout'}">Logout</a>
+</p>
+
+</body>
+</html>
